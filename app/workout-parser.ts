@@ -2,7 +2,14 @@ export const parseWorkouts = (rawText) => {
   const days = rawText.split(/\n(?=\d+-\d+-\d+)/);
   return days.reduce((acc, day) => {
     const date = day.substring(0, day.indexOf("\n")).trim();
-    acc[date] = parseDay(day);
+
+    // Convert date from "M-D-YYYY" to "YYYY-MM-DD"
+    const [month, dayPart, year] = date
+      .split("-")
+      .map((part) => part.padStart(2, "0"));
+    const convertedDate = `${year}-${month}-${dayPart}`;
+
+    acc[convertedDate] = parseDay(day);
     return acc;
   }, {});
 };
